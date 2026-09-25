@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 5：玩家与 NPC 交互。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、带碰撞体的人形 NPC，以及靠近后按 `E` 触发的基础交互。玩家移动、NPC 和交互均已通过 Play Mode 实际验证。
+当前完成阶段 6：对话 UI。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、人形 NPC，以及可输入和发送文本的对话面板。玩家移动、NPC、交互和对话 UI 均已通过 Play Mode 实际验证。
 
-对话 UI、AI 接入和情绪响应尚未开始实现。
+AI 接入和情绪响应尚未开始实现。当前 NPC 回复是可验证 UI 链路的固定占位内容。
 
 ## Unity 版本
 
@@ -30,7 +30,9 @@
 
 - `W`、`A`、`S`、`D`：相对相机方向移动玩家。
 - 鼠标移动：旋转第三人称相机。
-- 靠近 NPC 至 `2.5 m` 内按 `E`：触发 NPC 交互并使 NPC 转向玩家。
+- 靠近 NPC 至 `2.5 m` 内按 `E`：打开对话面板并使 NPC 转向玩家。
+- 点击输入框并输入文本，点击 `Send` 或按回车：显示 NPC 占位回复。
+- `Esc`：关闭对话面板并恢复玩家移动。
 - 玩家使用 `CharacterController`，会受地面、树木和岩石碰撞体阻挡。
 - 当前版本不包含跳跃。
 
@@ -54,10 +56,12 @@ Assets/
 ├── Scripts/
 │   ├── NPC/
 │   │   └── NpcInteractable.cs
-│   └── Player/
-│       ├── PlayerController.cs
-│       ├── PlayerInteractor.cs
-│       └── ThirdPersonCamera.cs
+│   ├── Player/
+│   │   ├── PlayerController.cs
+│   │   ├── PlayerInteractor.cs
+│   │   └── ThirdPersonCamera.cs
+│   └── UI/
+│       └── DialogueUI.cs
 ├── ThirdParty/
 │   └── KenneyNatureKit/
 Packages/

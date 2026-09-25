@@ -1,4 +1,5 @@
 using AIEmotionWorld.NPC;
+using AIEmotionWorld.UI;
 using UnityEngine;
 
 namespace AIEmotionWorld.Player
@@ -7,16 +8,28 @@ namespace AIEmotionWorld.Player
     {
         [SerializeField] private KeyCode interactionKey = KeyCode.E;
         [SerializeField] private float searchRadius = 6f;
+        [SerializeField] private DialogueUI dialogueUI;
 
         public NpcInteractable CurrentInteractable { get; private set; }
+
+        private void Awake()
+        {
+            if (dialogueUI == null)
+            {
+                dialogueUI = FindFirstObjectByType<DialogueUI>();
+            }
+        }
 
         private void Update()
         {
             CurrentInteractable = FindNearestInteractable();
 
-            if (CurrentInteractable != null && Input.GetKeyDown(interactionKey))
+            if (CurrentInteractable != null &&
+                Input.GetKeyDown(interactionKey) &&
+                dialogueUI != null &&
+                !dialogueUI.IsOpen)
             {
-                CurrentInteractable.Interact(gameObject);
+                dialogueUI.Open(CurrentInteractable, gameObject);
             }
         }
 

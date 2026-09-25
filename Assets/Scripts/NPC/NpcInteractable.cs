@@ -10,7 +10,17 @@ namespace AIEmotionWorld.NPC
         public string NpcName => npcName;
         public float InteractionRange => interactionRange;
 
-        public void Interact(GameObject interactor)
+        public string GetGreeting()
+        {
+            return "Hello, traveler.";
+        }
+
+        public string CreateReply(string playerMessage)
+        {
+            return $"I heard: \"{playerMessage}\".";
+        }
+
+        public void FaceInteractor(GameObject interactor)
         {
             if (interactor == null)
             {
