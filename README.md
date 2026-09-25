@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 2：最小 3D 场景。`Environment` 场景已包含地面、道路、树木、灌木、岩石、碰撞体、基础灯光和相机，并已在 Play Mode 中运行验证。
+当前完成阶段 3：玩家移动。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动和第三人称跟随相机，并已通过 Play Mode 实际运行验证。
 
-玩家移动、NPC、对话、AI 接入和情绪响应尚未开始实现。
+NPC、对话、AI 接入和情绪响应尚未开始实现。
 
 ## Unity 版本
 
@@ -26,6 +26,13 @@
 
 进入 Play Mode 后应能看到绿色地面、中央石板路以及分布在庭院中的树木、灌木和岩石。
 
+## 操作方式
+
+- `W`、`A`、`S`、`D`：相对相机方向移动玩家。
+- 鼠标移动：旋转第三人称相机。
+- 玩家使用 `CharacterController`，会受地面、树木和岩石碰撞体阻挡。
+- 当前版本不包含跳跃。
+
 ## 项目结构
 
 ```text
@@ -33,15 +40,19 @@ Assets/
 ├── Scenes/
 │   └── Environment.unity
 ├── Materials/
-│   └── Environment/
+│   ├── Environment/
+│   └── Player/
 ├── Prefabs/
 │   └── Environment/
 │       ├── Plants/
 │       ├── Rocks/
 │       └── Trees/
+├── Scripts/
+│   └── Player/
+│       ├── PlayerController.cs
+│       └── ThirdPersonCamera.cs
 ├── ThirdParty/
 │   └── KenneyNatureKit/
-└── Scripts/
 Packages/
 ProjectSettings/
 AGENTS.md
