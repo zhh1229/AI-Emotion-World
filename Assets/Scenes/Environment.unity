@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 61654067}
   - component: {fileID: 61654072}
   - component: {fileID: 61654073}
+  - component: {fileID: 61654074}
   m_Layer: 5
   m_Name: DialogueCanvas
   m_TagString: Untagged
@@ -272,6 +273,7 @@ MonoBehaviour:
   sendButton: {fileID: 72020289}
   playerController: {fileID: 485753127}
   conversationService: {fileID: 61654073}
+  fontProvider: {fileID: 61654074}
 --- !u!114 &61654068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,6 +383,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.AI.EmotionConversationService
   chatClient: {fileID: 61654072}
+--- !u!114 &61654074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61654066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95bfe65d096406c41b63f96266a67eba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.UI.ChineseFontAssetProvider
+  sourceFont: {fileID: 12800000, guid: cbf2e5504e6dbb148b1deb46b32b15e8, type: 3}
 --- !u!1001 &68110127
 PrefabInstance:
   m_ObjectHideFlags: 0

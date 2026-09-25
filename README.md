@@ -33,6 +33,7 @@
 - 靠近 NPC 至 `2.5 m` 内按 `E`：打开对话面板并使 NPC 转向玩家。
 - 点击输入框并输入文本，点击 `Send` 或按回车：显示 NPC 占位回复。
 - `Esc`：关闭对话面板并恢复玩家移动。
+- 输入框支持中文输入和中文 AI 回复显示。
 - 玩家使用 `CharacterController`，会受地面、树木和岩石碰撞体阻挡。
 - 当前版本不包含跳跃。
 
@@ -109,6 +110,15 @@ AI 必须返回以下结构：
 
 情绪事件到达时，NPC 姿态和场景反馈会在同一帧立即改变；`Update` 负责后续平滑动画。
 
+## 中文字体
+
+对话 UI 使用 Noto Sans SC 作为 TMP 动态中文字体。输入文字变化和 AI 回复显示前会按需加入所需字形。
+
+- 字体来源：<https://github.com/notofonts/noto-cjk>
+- 字体文件：`NotoSansSC-Regular.otf`
+- 许可证：SIL Open Font License 1.1
+- 项目位置：`Assets/ThirdParty/NotoSansSC`
+
 ## 项目结构
 
 ```text
@@ -145,9 +155,11 @@ Assets/
 │   │   ├── PlayerInteractor.cs
 │   │   └── ThirdPersonCamera.cs
 │   └── UI/
+│       ├── ChineseFontAssetProvider.cs
 │       └── DialogueUI.cs
 ├── ThirdParty/
-│   └── KenneyNatureKit/
+│   ├── KenneyNatureKit/
+│   └── NotoSansSC/
 Packages/
 ProjectSettings/
 AGENTS.md

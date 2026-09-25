@@ -17,9 +17,11 @@ namespace AIEmotionWorld.UI
         [SerializeField] private Button sendButton;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private EmotionConversationService conversationService;
+        [SerializeField] private ChineseFontAssetProvider fontProvider;
 
         private NpcInteractable currentNpc;
         private GameObject currentInteractor;
+        private TMP_FontAsset activeFont;
 
         public bool IsOpen => dialoguePanel != null && dialoguePanel.activeSelf;
 
@@ -30,13 +32,16 @@ namespace AIEmotionWorld.UI
                 responseText == null ||
                 inputField == null ||
                 sendButton == null ||
-                conversationService == null)
+                conversationService == null ||
+                fontProvider == null)
             {
                 Debug.LogError("Dialogue UI references are incomplete.", this);
                 enabled = false;
                 return;
             }
 
+            ApplyChineseFont(fontProvider.GetFontAsset());
+            inputField.onValueChanged.AddListener(EnsureFontCharacters);
             sendButton.onClick.AddListener(SubmitMessage);
             inputField.onSubmit.AddListener(_ => SubmitMessage());
             dialoguePanel.SetActive(false);
@@ -94,6 +99,7 @@ namespace AIEmotionWorld.UI
                 return;
             }
 
+            EnsureFontCharacters(playerMessage);
             string npcName = currentNpc.NpcName;
             inputField.text = string.Empty;
             responseText.text = $"{npcName}: Thinking...";
@@ -112,6 +118,7 @@ namespace AIEmotionWorld.UI
             EmotionResult result)
         {
             targetNpc?.ApplyEmotion(result);
+            EnsureFontCharacters(result.Reply);
             responseText.text = $"{npcName}: {result.Reply}";
             SetInputEnabled(true);
             EventSystem.current?.SetSelectedGameObject(inputField.gameObject);
@@ -130,6 +137,42 @@ namespace AIEmotionWorld.UI
         {
             inputField.interactable = enabled;
             sendButton.interactable = enabled;
+        }
+
+        private void ApplyChineseFont(TMP_FontAsset font)
+        {
+            if (font == null)
+            {
+                return;
+            }
+
+            activeFont = font;
+            EnsureFontCharacters("中文测试你好庭院情绪开心悲伤愤怒平静中性，。！？");
+            speakerText.font = font;
+            responseText.font = font;
+            inputField.textComponent.font = font;
+
+            if (inputField.placeholder is TMP_Text placeholderText)
+            {
+                placeholderText.font = font;
+            }
+
+            TMP_Text buttonLabel = sendButton.GetComponentInChildren<TMP_Text>(true);
+
+            if (buttonLabel != null)
+            {
+                buttonLabel.font = font;
+            }
+        }
+
+        private void EnsureFontCharacters(string text)
+        {
+            if (activeFont == null || string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            activeFont.TryAddCharacters(text, out _, true);
         }
     }
 }
