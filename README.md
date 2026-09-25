@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 10：NPC 情绪反应。`NpcEmotionState` 的五种情绪会触发不同颜色、姿态和动作，对话回复与 NPC 表现会同步更新。
+当前完成阶段 11：简单场景反馈。五种情绪会同步改变 NPC 表现、灯光颜色和亮度、环境色、背景色和地面色调。
 
-玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求、结构化情绪解析、NPC 情绪状态同步和五种 NPC 情绪表现均已通过实际运行验证。场景级情绪反馈尚未开始实现。
+玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求、结构化情绪解析、NPC 情绪状态同步、NPC 情绪表现和场景反馈均已通过实际运行验证。
 
 ## Unity 版本
 
@@ -97,6 +97,18 @@ AI 必须返回以下结构：
 | `calm` | 绿色躯干、自然呼吸、身体平稳 |
 | `neutral` | 原始颜色和标准站姿 |
 
+## 场景情绪反馈
+
+| 情绪 | 场景表现 |
+|---|---|
+| `happy` | 暖金色高亮灯光、明亮蓝天、金黄色地面 |
+| `sad` | 冷蓝低亮灯光、深蓝环境色、低饱和地面和轻雾 |
+| `angry` | 红色高亮灯光、暗红背景、红棕地面和轻雾 |
+| `calm` | 青绿色柔和灯光、清爽背景和明亮草地 |
+| `neutral` | 恢复原始灯光、背景和地面颜色 |
+
+情绪事件到达时，NPC 姿态和场景反馈会在同一帧立即改变；`Update` 负责后续平滑动画。
+
 ## 项目结构
 
 ```text
@@ -122,6 +134,8 @@ Assets/
 │   │   ├── DeepSeekEmotionResponseParser.cs
 │   │   ├── EmotionConversationService.cs
 │   │   └── EmotionResult.cs
+│   ├── Core/
+│   │   └── SceneEmotionFeedback.cs
 │   ├── NPC/
 │   │   ├── NpcEmotionState.cs
 │   │   ├── NpcEmotionReaction.cs

@@ -25,6 +25,9 @@ namespace AIEmotionWorld.NPC
         private Renderer torsoRenderer;
         private Material torsoMaterial;
         private Color originalTorsoColor;
+        private Transform visualRoot;
+        private Vector3 originalVisualPosition;
+        private Vector3 originalVisualScale;
 
         private EmotionType currentEmotion = EmotionType.Neutral;
         private float currentIntensity;
@@ -44,6 +47,7 @@ namespace AIEmotionWorld.NPC
             ResolvePoseTargets();
             ApplyEmotion(emotionState.CurrentEmotion, emotionState.CurrentIntensity);
             emotionState.EmotionChanged += HandleEmotionChanged;
+            AnimatePose(1f);
         }
 
         private void OnDestroy()
@@ -56,12 +60,14 @@ namespace AIEmotionWorld.NPC
 
         private void Update()
         {
-            AnimatePose();
+            float transition = 1f - Mathf.Exp(-transitionSpeed * Time.deltaTime);
+            AnimatePose(transition);
         }
 
         private void HandleEmotionChanged(EmotionResult result)
         {
             ApplyEmotion(result.Emotion, result.Intensity);
+            AnimatePose(1f);
         }
 
         private void ApplyEmotion(EmotionType emotion, float intensity)
@@ -72,7 +78,7 @@ namespace AIEmotionWorld.NPC
 
         private void ResolvePoseTargets()
         {
-            Transform visualRoot = transform.Find("Visual");
+            visualRoot = transform.Find("Visual");
 
             if (visualRoot == null)
             {
@@ -111,16 +117,17 @@ namespace AIEmotionWorld.NPC
             torsoRenderer = poseTargets[TorsoIndex].GetComponent<Renderer>();
             torsoMaterial = torsoRenderer != null ? torsoRenderer.material : null;
             originalTorsoColor = torsoMaterial != null ? torsoMaterial.color : Color.white;
+            originalVisualPosition = visualRoot.localPosition;
+            originalVisualScale = visualRoot.localScale;
         }
 
-        private void AnimatePose()
+        private void AnimatePose(float transition)
         {
             if (poseTargets == null || poseTargets.Length == 0)
             {
                 return;
             }
 
-            float transition = 1f - Mathf.Exp(-transitionSpeed * Time.deltaTime);
             float intensity = currentIntensity;
             float time = Time.time;
             float breathing = Mathf.Sin(time * 2f) * 0.012f;
@@ -131,39 +138,48 @@ namespace AIEmotionWorld.NPC
             Vector3 leftArmRotationOffset = Vector3.zero;
             Vector3 rightArmRotationOffset = Vector3.zero;
             Color targetTorsoColor = originalTorsoColor;
+            Vector3 visualPositionOffset = Vector3.zero;
+            float targetVisualScale = 1f;
 
             switch (currentEmotion)
             {
                 case EmotionType.Happy:
-                    torsoPositionOffset += Vector3.up * (0.06f * intensity);
-                    torsoRotationOffset.z = Mathf.Sin(time * 4f) * 3f * intensity;
-                    headRotationOffset.x = -12f * intensity;
-                    leftArmRotationOffset.z = -30f * intensity;
-                    rightArmRotationOffset.z = 30f * intensity;
+                    torsoPositionOffset += Vector3.up * (0.12f * intensity);
+                    torsoRotationOffset.z = Mathf.Sin(time * 5f) * 6f * intensity;
+                    headRotationOffset.x = -22f * intensity;
+                    leftArmRotationOffset.z = -55f * intensity;
+                    rightArmRotationOffset.z = 55f * intensity;
+                    visualPositionOffset.y = Mathf.Abs(Mathf.Sin(time * 4f)) * 0.05f * intensity;
+                    targetVisualScale = 1f + 0.08f * intensity;
                     targetTorsoColor = Color.Lerp(originalTorsoColor, HappyColor, intensity);
                     break;
                 case EmotionType.Sad:
-                    torsoPositionOffset += Vector3.down * (0.07f * intensity);
-                    torsoRotationOffset.x = 10f * intensity;
-                    headRotationOffset.x = 24f * intensity;
-                    leftArmRotationOffset.z = 8f * intensity;
-                    rightArmRotationOffset.z = -8f * intensity;
+                    torsoPositionOffset += Vector3.down * (0.13f * intensity);
+                    torsoRotationOffset.x = 16f * intensity;
+                    headRotationOffset.x = 38f * intensity;
+                    leftArmRotationOffset.z = -18f * intensity;
+                    rightArmRotationOffset.z = 18f * intensity;
+                    targetVisualScale = 1f - 0.07f * intensity;
                     targetTorsoColor = Color.Lerp(originalTorsoColor, SadColor, intensity);
                     break;
                 case EmotionType.Angry:
                     torsoPositionOffset += new Vector3(
-                        Mathf.Sin(time * 16f) * 0.012f * intensity,
+                        Mathf.Sin(time * 20f) * 0.035f * intensity,
                         0f,
                         0f);
-                    torsoRotationOffset.x = 6f * intensity;
-                    headRotationOffset.x = -5f * intensity;
-                    leftArmRotationOffset.z = -45f * intensity;
-                    rightArmRotationOffset.z = 45f * intensity;
+                    torsoRotationOffset.x = 10f * intensity;
+                    headRotationOffset.x = -10f * intensity;
+                    leftArmRotationOffset.z = -70f * intensity;
+                    rightArmRotationOffset.z = 70f * intensity;
+                    visualPositionOffset.x = Mathf.Sin(time * 22f) * 0.025f * intensity;
+                    targetVisualScale = 1f + 0.11f * intensity;
                     targetTorsoColor = Color.Lerp(originalTorsoColor, AngryColor, intensity);
                     break;
                 case EmotionType.Calm:
-                    torsoPositionOffset += Vector3.up * (breathing * 0.5f);
-                    headRotationOffset.x = 3f * intensity;
+                    torsoPositionOffset += Vector3.up * (breathing * 0.8f);
+                    torsoRotationOffset.z = Mathf.Sin(time * 1.4f) * 1.5f * intensity;
+                    headRotationOffset.x = 5f * intensity;
+                    targetVisualScale = 1f + 0.02f * intensity;
                     targetTorsoColor = Color.Lerp(originalTorsoColor, CalmColor, intensity);
                     break;
                 default:
@@ -175,6 +191,18 @@ namespace AIEmotionWorld.NPC
             ApplyLocalTransform(HeadIndex, Vector3.zero, headRotationOffset, transition);
             ApplyLocalTransform(LeftArmIndex, Vector3.zero, leftArmRotationOffset, transition);
             ApplyLocalTransform(RightArmIndex, Vector3.zero, rightArmRotationOffset, transition);
+
+            if (visualRoot != null)
+            {
+                visualRoot.localPosition = Vector3.Lerp(
+                    visualRoot.localPosition,
+                    originalVisualPosition + visualPositionOffset,
+                    transition);
+                visualRoot.localScale = Vector3.Lerp(
+                    visualRoot.localScale,
+                    originalVisualScale * targetVisualScale,
+                    transition);
+            }
 
             if (torsoMaterial != null)
             {
