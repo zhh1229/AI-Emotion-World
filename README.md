@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 3：玩家移动。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动和第三人称跟随相机，并已通过 Play Mode 实际运行验证。
+当前完成阶段 4：NPC。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机，以及一个带碰撞体的人形 NPC。玩家移动与 NPC 场景均已通过 Play Mode 实际验证。
 
-NPC、对话、AI 接入和情绪响应尚未开始实现。
+NPC 交互、对话、AI 接入和情绪响应尚未开始实现。
 
 ## Unity 版本
 
@@ -41,12 +41,15 @@ Assets/
 │   └── Environment.unity
 ├── Materials/
 │   ├── Environment/
+│   ├── NPC/
 │   └── Player/
 ├── Prefabs/
-│   └── Environment/
-│       ├── Plants/
-│       ├── Rocks/
-│       └── Trees/
+│   ├── Environment/
+│   │   ├── Plants/
+│   │   ├── Rocks/
+│   │   └── Trees/
+│   └── NPC/
+│       └── NPC_Default.prefab
 ├── Scripts/
 │   └── Player/
 │       ├── PlayerController.cs
