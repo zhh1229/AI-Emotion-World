@@ -16,7 +16,7 @@ namespace AIEmotionWorld.UI
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button sendButton;
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private DeepSeekChatClient chatClient;
+        [SerializeField] private EmotionConversationService conversationService;
 
         private NpcInteractable currentNpc;
         private GameObject currentInteractor;
@@ -30,7 +30,7 @@ namespace AIEmotionWorld.UI
                 responseText == null ||
                 inputField == null ||
                 sendButton == null ||
-                chatClient == null)
+                conversationService == null)
             {
                 Debug.LogError("Dialogue UI references are incomplete.", this);
                 enabled = false;
@@ -98,16 +98,21 @@ namespace AIEmotionWorld.UI
             inputField.text = string.Empty;
             responseText.text = $"{npcName}: Thinking...";
             SetInputEnabled(false);
+            NpcInteractable targetNpc = currentNpc;
 
-            chatClient.SendChat(
+            conversationService.RequestEmotion(
                 playerMessage,
-                result => HandleReply(npcName, result.Reply),
+                result => HandleReply(npcName, targetNpc, result),
                 error => HandleRequestError(error));
         }
 
-        private void HandleReply(string npcName, string reply)
+        private void HandleReply(
+            string npcName,
+            NpcInteractable targetNpc,
+            EmotionResult result)
         {
-            responseText.text = $"{npcName}: {reply}";
+            targetNpc?.ApplyEmotion(result);
+            responseText.text = $"{npcName}: {result.Reply}";
             SetInputEnabled(true);
             EventSystem.current?.SetSelectedGameObject(inputField.gameObject);
             inputField.ActivateInputField();

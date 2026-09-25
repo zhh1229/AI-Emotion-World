@@ -14,9 +14,7 @@ namespace AIEmotionWorld.AI
         private bool hasRuntimeSettings;
 
         public bool IsRequestInProgress { get; private set; }
-        public bool HasLastResult { get; private set; }
-        public EmotionResult LastResult { get; private set; }
-        public string LastReply { get; private set; }
+        public string LastContent { get; private set; }
         public string LastError { get; private set; }
 
         public void ConfigureForTesting(string apiUrl, string apiKey, string model)
@@ -33,7 +31,7 @@ namespace AIEmotionWorld.AI
 
         public void SendChat(
             string playerMessage,
-            Action<EmotionResult> onSuccess,
+            Action<string> onSuccess,
             Action<string> onError)
         {
             if (IsRequestInProgress)
@@ -67,7 +65,7 @@ namespace AIEmotionWorld.AI
             };
 
             IsRequestInProgress = true;
-            HasLastResult = false;
+            LastContent = null;
             LastError = null;
             StartCoroutine(SendChatRequest(requestBody, settings, onSuccess, onError));
         }
@@ -75,7 +73,7 @@ namespace AIEmotionWorld.AI
         private IEnumerator SendChatRequest(
             ChatCompletionRequest requestBody,
             DeepSeekConnectionSettings settings,
-            Action<EmotionResult> onSuccess,
+            Action<string> onSuccess,
             Action<string> onError)
         {
             string json = JsonUtility.ToJson(requestBody);
@@ -97,9 +95,9 @@ namespace AIEmotionWorld.AI
                     yield break;
                 }
 
-                if (!TryParseEmotionResponse(
+                if (!TryGetAssistantContent(
                         request.downloadHandler.text,
-                        out EmotionResult result,
+                        out string content,
                         out string parseError))
                 {
                     ReportFailure(parseError, onError);
@@ -107,11 +105,9 @@ namespace AIEmotionWorld.AI
                 }
 
                 IsRequestInProgress = false;
-                HasLastResult = true;
-                LastResult = result;
-                LastReply = result.Reply;
+                LastContent = content;
                 LastError = null;
-                onSuccess?.Invoke(result);
+                onSuccess?.Invoke(content);
             }
         }
 
@@ -157,14 +153,14 @@ namespace AIEmotionWorld.AI
             return $"AI request failed ({request.responseCode}): {transportError}";
         }
 
-        private static bool TryParseEmotionResponse(
+        private static bool TryGetAssistantContent(
             string responseJson,
-            out EmotionResult result,
+            out string content,
             out string error)
         {
             if (string.IsNullOrWhiteSpace(responseJson))
             {
-                result = default;
+                content = null;
                 error = "AI response was empty.";
                 return false;
             }
@@ -173,22 +169,23 @@ namespace AIEmotionWorld.AI
             {
                 ChatCompletionResponse response =
                     JsonUtility.FromJson<ChatCompletionResponse>(responseJson);
-                string content = response?.choices is { Length: > 0 }
+                content = response?.choices is { Length: > 0 }
                     ? response.choices[0]?.message?.content
                     : null;
 
                 if (string.IsNullOrWhiteSpace(content))
                 {
-                    result = default;
                     error = "AI response did not contain a message.";
                     return false;
                 }
 
-                return DeepSeekEmotionResponseParser.TryParse(content, out result, out error);
+                content = content.Trim();
+                error = null;
+                return true;
             }
             catch (ArgumentException)
             {
-                result = default;
+                content = null;
                 error = "AI response was not valid JSON.";
                 return false;
             }
@@ -197,8 +194,7 @@ namespace AIEmotionWorld.AI
         private void ReportFailure(string error, Action<string> onError)
         {
             IsRequestInProgress = false;
-            HasLastResult = false;
-            LastReply = null;
+            LastContent = null;
             LastError = error;
             Debug.LogWarning(error, this);
             onError?.Invoke(error);

@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: 61654068}
   - component: {fileID: 61654067}
   - component: {fileID: 61654072}
+  - component: {fileID: 61654073}
   m_Layer: 5
   m_Name: DialogueCanvas
   m_TagString: Untagged
@@ -270,7 +271,7 @@ MonoBehaviour:
   inputField: {fileID: 681953801}
   sendButton: {fileID: 72020289}
   playerController: {fileID: 485753127}
-  chatClient: {fileID: 61654072}
+  conversationService: {fileID: 61654073}
 --- !u!114 &61654068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,6 +368,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.AI.DeepSeekChatClient
   timeoutSeconds: 30
+--- !u!114 &61654073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61654066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6957c9e2f27c7be4599e2afed09cb0f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.AI.EmotionConversationService
+  chatClient: {fileID: 61654072}
 --- !u!1001 &68110127
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2908,6 +2922,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.NPC.NpcInteractable
   npcName: Courtyard Visitor
   interactionRange: 2.5
+  emotionState: {fileID: 2103608270}
+--- !u!114 &2103608270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103608266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a7c247e5719634e9ee1fe03f36d0da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.NPC.NpcEmotionState
+  currentEmotion: 4
+  currentIntensity: 0
 --- !u!1001 &1334564612180904905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2967,6 +2996,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2103608269}
+    - targetCorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2103608270}
   m_SourcePrefab: {fileID: 100100000, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

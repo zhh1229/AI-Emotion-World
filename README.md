@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 8：AI JSON 情绪输出。DeepSeek 请求现在要求只返回包含 `emotion`、`intensity` 和 `reply` 的 JSON 对象，Unity 会严格校验字段后再显示回复。
+当前完成阶段 9：Unity 情绪解析。DeepSeek 返回的 JSON 会先经过统一解析服务，再生成 `EmotionResult` 并同步到 NPC 的 `NpcEmotionState`，对话 UI 只负责显示回复。
 
-玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求和结构化情绪响应均已通过实际运行验证。NPC 情绪表现和场景反馈尚未开始实现。
+玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求、结构化情绪解析和 NPC 情绪状态同步均已通过实际运行验证。NPC 情绪表现和场景反馈尚未开始实现。
 
 ## Unity 版本
 
@@ -74,6 +74,19 @@ AI 必须返回以下结构：
 - `reply` 必须是非空字符串。
 - 缺字段、未知情绪、强度越界、非法 JSON 和非 2xx 响应都会显示明确错误。
 
+## 情绪链路
+
+```text
+玩家输入
+-> DeepSeekChatClient 提取原始回复
+-> EmotionConversationService 严格解析
+-> EmotionResult
+-> NpcEmotionState
+-> DialogueUI 显示 reply
+```
+
+`EmotionConversationService` 负责请求编排和解析，`NpcEmotionState` 保存当前情绪与强度。非法响应不会修改 NPC 当前状态。
+
 ## 项目结构
 
 ```text
@@ -97,8 +110,10 @@ Assets/
 │   │   ├── DeepSeekApiSettings.cs
 │   │   ├── DeepSeekChatClient.cs
 │   │   ├── DeepSeekEmotionResponseParser.cs
+│   │   ├── EmotionConversationService.cs
 │   │   └── EmotionResult.cs
 │   ├── NPC/
+│   │   ├── NpcEmotionState.cs
 │   │   └── NpcInteractable.cs
 │   ├── Player/
 │   │   ├── PlayerController.cs
