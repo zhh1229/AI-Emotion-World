@@ -16,9 +16,9 @@ MVP 包含：
 
 ## 当前状态
 
-当前完成阶段 15：Git 提交整理。本地提交历史已审计并推送到 GitHub `main` 分支。
+当前完成阶段 16：最终打包。Windows x64 构建和可分发 ZIP 已生成并通过启动测试。
 
-后续进入最终打包阶段。
+项目功能、文档、Git 历史和 Windows 打包均已完成。
 
 ## 远程仓库
 
@@ -51,6 +51,40 @@ MVP 包含：
 7. 点击 Play，靠近 NPC 并按 `E` 开始对话。
 
 进入 Play Mode 后应能看到绿色地面、中央石板路以及分布在庭院中的树木、灌木和岩石。
+
+## Windows 构建
+
+已生成的构建目录：
+
+```text
+Builds/Windows/AIEmotionWorld.exe
+```
+
+已生成的 Windows x64 压缩包：
+
+```text
+Builds/AIEmotionWorld-Windows-x64.zip
+```
+
+- SHA-256：`3145A4D11FAB90F669FE4527668E73048635282736B949FB9A3924894601A34E`
+- 解压后目录约 `96.21 MB`，ZIP 约 `42.39 MB`。
+- ZIP 包含 EXE、`UnityPlayer.dll`、数据目录、Mono 运行时和构建来源清单。
+- 构建产物位于 `/Builds/`，该目录已被 Git 忽略，不进入远程仓库。
+- API Key 不包含在构建产物中，程序仍从本机环境变量或 AppData 配置读取。
+
+命令行复现构建：
+
+```powershell
+unity build "C:\Users\new\Documents\ChatGPT\元宇宙" `
+  --target StandaloneWindows64 `
+  --output-path "C:\Users\new\Documents\ChatGPT\元宇宙\Builds\Windows\AIEmotionWorld.exe"
+```
+
+Windows 播放器启动检查已通过：
+
+- 进程保持运行且响应正常。
+- 窗口标题为 `AI Emotion World`。
+- `Player.log` 未发现异常。
 
 ## 操作方式
 
