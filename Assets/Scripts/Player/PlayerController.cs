@@ -15,7 +15,6 @@ namespace AIEmotionWorld.Player
 
         private CharacterController characterController;
         private float verticalVelocity;
-        private bool movementEnabled = true;
 
         private void Awake()
         {
@@ -29,23 +28,12 @@ namespace AIEmotionWorld.Player
 
         private void Update()
         {
-            if (!movementEnabled)
-            {
-                Move(Vector3.zero);
-                return;
-            }
-
             float horizontalInput = Input.GetAxisRaw("Horizontal");
             float verticalInput = Input.GetAxisRaw("Vertical");
 
             Vector3 movementDirection = GetMovementDirection(horizontalInput, verticalInput);
             Move(movementDirection);
             Rotate(movementDirection);
-        }
-
-        public void SetMovementEnabled(bool enabled)
-        {
-            movementEnabled = enabled;
         }
 
         private Vector3 GetMovementDirection(float horizontalInput, float verticalInput)

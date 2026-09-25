@@ -1,6 +1,5 @@
 using AIEmotionWorld.AI;
 using AIEmotionWorld.NPC;
-using AIEmotionWorld.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +14,6 @@ namespace AIEmotionWorld.UI
         [SerializeField] private TMP_Text responseText;
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button sendButton;
-        [SerializeField] private PlayerController playerController;
         [SerializeField] private EmotionConversationService conversationService;
         [SerializeField] private ChineseFontAssetProvider fontProvider;
 
@@ -70,7 +68,6 @@ namespace AIEmotionWorld.UI
             responseText.text = currentNpc.GetGreeting();
             inputField.text = string.Empty;
             dialoguePanel.SetActive(true);
-            playerController?.SetMovementEnabled(false);
 
             EventSystem.current?.SetSelectedGameObject(inputField.gameObject);
             inputField.ActivateInputField();
@@ -81,7 +78,6 @@ namespace AIEmotionWorld.UI
             dialoguePanel.SetActive(false);
             currentNpc = null;
             currentInteractor = null;
-            playerController?.SetMovementEnabled(true);
             EventSystem.current?.SetSelectedGameObject(null);
         }
 
