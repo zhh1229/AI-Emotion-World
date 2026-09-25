@@ -17,6 +17,7 @@ namespace AIEmotionWorld.AI
         public string LastContent { get; private set; }
         public string LastError { get; private set; }
 
+#if UNITY_EDITOR
         public void ConfigureForTesting(string apiUrl, string apiKey, string model)
         {
             runtimeSettings = new DeepSeekConnectionSettings(apiKey, apiUrl, model);
@@ -28,6 +29,7 @@ namespace AIEmotionWorld.AI
             runtimeSettings = default;
             hasRuntimeSettings = false;
         }
+#endif
 
         public void SendChat(
             string playerMessage,

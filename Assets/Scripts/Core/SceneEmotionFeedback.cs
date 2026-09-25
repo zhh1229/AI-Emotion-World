@@ -163,7 +163,7 @@ namespace AIEmotionWorld.Core
             cameraColor = originalCameraColor;
             groundColor = originalGroundColor;
             fogColor = originalFogColor;
-            fogDensity = 0f;
+            fogDensity = originalFogDensity;
             blend = 0f;
 
             float effectStrength = Mathf.Lerp(0.55f, 1f, Mathf.Clamp01(intensity));
@@ -223,7 +223,9 @@ namespace AIEmotionWorld.Core
 
             RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
             RenderSettings.ambientLight = currentAmbientColor;
-            RenderSettings.fog = currentEffectBlend >= 0.5f;
+            RenderSettings.fog = currentEffectBlend >= 0.5f
+                ? true
+                : originalFogEnabled;
             RenderSettings.fogColor = currentFogColor;
             RenderSettings.fogDensity = currentFogDensity;
 

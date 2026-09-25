@@ -43,6 +43,7 @@ namespace AIEmotionWorld.AI
                 error => ReportFailure(error, onError));
         }
 
+#if UNITY_EDITOR
         public void ConfigureForTesting(string apiUrl, string apiKey, string model)
         {
             chatClient?.ConfigureForTesting(apiUrl, apiKey, model);
@@ -52,6 +53,7 @@ namespace AIEmotionWorld.AI
         {
             chatClient?.ClearRuntimeConfiguration();
         }
+#endif
 
         private void HandleContent(
             string content,
@@ -76,6 +78,7 @@ namespace AIEmotionWorld.AI
         private void ReportFailure(string error, Action<string> onError)
         {
             HasLastResult = false;
+            LastResult = default;
             LastError = error;
             onError?.Invoke(error);
         }

@@ -46,8 +46,6 @@ namespace AIEmotionWorld.NPC
             {
                 transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
             }
-
-            Debug.Log($"{npcName}: Hello, traveler.", this);
         }
     }
 }
