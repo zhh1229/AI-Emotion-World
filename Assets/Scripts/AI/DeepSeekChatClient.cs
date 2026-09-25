@@ -14,6 +14,8 @@ namespace AIEmotionWorld.AI
         private bool hasRuntimeSettings;
 
         public bool IsRequestInProgress { get; private set; }
+        public bool HasLastResult { get; private set; }
+        public EmotionResult LastResult { get; private set; }
         public string LastReply { get; private set; }
         public string LastError { get; private set; }
 
@@ -29,7 +31,10 @@ namespace AIEmotionWorld.AI
             hasRuntimeSettings = false;
         }
 
-        public void SendChat(string playerMessage, Action<string> onSuccess, Action<string> onError)
+        public void SendChat(
+            string playerMessage,
+            Action<EmotionResult> onSuccess,
+            Action<string> onError)
         {
             if (IsRequestInProgress)
             {
@@ -52,12 +57,17 @@ namespace AIEmotionWorld.AI
                     new ChatMessage(
                         "system",
                         "You are a friendly NPC in a small 3D courtyard. " +
-                        "Reply in the same language as the player. Keep answers under two short sentences."),
+                        "Return only one valid JSON object with exactly these fields: " +
+                        "\"emotion\" (one of happy, sad, angry, calm, neutral), " +
+                        "\"intensity\" (a number from 0 to 1), and " +
+                        "\"reply\" (a short answer in the player's language). " +
+                        "Do not use Markdown or code fences. Do not add any text outside the JSON object."),
                     new ChatMessage("user", playerMessage)
                 }
             };
 
             IsRequestInProgress = true;
+            HasLastResult = false;
             LastError = null;
             StartCoroutine(SendChatRequest(requestBody, settings, onSuccess, onError));
         }
@@ -65,7 +75,7 @@ namespace AIEmotionWorld.AI
         private IEnumerator SendChatRequest(
             ChatCompletionRequest requestBody,
             DeepSeekConnectionSettings settings,
-            Action<string> onSuccess,
+            Action<EmotionResult> onSuccess,
             Action<string> onError)
         {
             string json = JsonUtility.ToJson(requestBody);
@@ -87,16 +97,21 @@ namespace AIEmotionWorld.AI
                     yield break;
                 }
 
-                if (!TryParseReply(request.downloadHandler.text, out string reply, out string parseError))
+                if (!TryParseEmotionResponse(
+                        request.downloadHandler.text,
+                        out EmotionResult result,
+                        out string parseError))
                 {
                     ReportFailure(parseError, onError);
                     yield break;
                 }
 
                 IsRequestInProgress = false;
-                LastReply = reply;
+                HasLastResult = true;
+                LastResult = result;
+                LastReply = result.Reply;
                 LastError = null;
-                onSuccess?.Invoke(reply);
+                onSuccess?.Invoke(result);
             }
         }
 
@@ -142,11 +157,14 @@ namespace AIEmotionWorld.AI
             return $"AI request failed ({request.responseCode}): {transportError}";
         }
 
-        private static bool TryParseReply(string responseJson, out string reply, out string error)
+        private static bool TryParseEmotionResponse(
+            string responseJson,
+            out EmotionResult result,
+            out string error)
         {
             if (string.IsNullOrWhiteSpace(responseJson))
             {
-                reply = null;
+                result = default;
                 error = "AI response was empty.";
                 return false;
             }
@@ -161,18 +179,16 @@ namespace AIEmotionWorld.AI
 
                 if (string.IsNullOrWhiteSpace(content))
                 {
-                    reply = null;
+                    result = default;
                     error = "AI response did not contain a message.";
                     return false;
                 }
 
-                reply = content.Trim();
-                error = null;
-                return true;
+                return DeepSeekEmotionResponseParser.TryParse(content, out result, out error);
             }
             catch (ArgumentException)
             {
-                reply = null;
+                result = default;
                 error = "AI response was not valid JSON.";
                 return false;
             }
@@ -181,6 +197,7 @@ namespace AIEmotionWorld.AI
         private void ReportFailure(string error, Action<string> onError)
         {
             IsRequestInProgress = false;
+            HasLastResult = false;
             LastReply = null;
             LastError = error;
             Debug.LogWarning(error, this);

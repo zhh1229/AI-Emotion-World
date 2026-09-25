@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 7：AI 接入。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、人形 NPC、对话 UI，以及可调用 DeepSeek 官方接口的文本回复链路。
+当前完成阶段 8：AI JSON 情绪输出。DeepSeek 请求现在要求只返回包含 `emotion`、`intensity` 和 `reply` 的 JSON 对象，Unity 会严格校验字段后再显示回复。
 
-玩家移动、NPC、交互、对话 UI、模拟 API 错误处理和真实 DeepSeek 请求均已通过实际运行验证。结构化情绪响应尚未开始实现。
+玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求和结构化情绪响应均已通过实际运行验证。NPC 情绪表现和场景反馈尚未开始实现。
 
 ## Unity 版本
 
@@ -59,6 +59,21 @@
 
 默认接口为 `https://api.deepseek.com/chat/completions`，默认模型为 `deepseek-v4-flash`。
 
+AI 必须返回以下结构：
+
+```json
+{
+  "emotion": "happy",
+  "intensity": 0.8,
+  "reply": "嗨！今天天气真好，很高兴见到你！"
+}
+```
+
+- `emotion` 只能是 `happy`、`sad`、`angry`、`calm`、`neutral`。
+- `intensity` 必须是 `0` 到 `1` 之间的数字。
+- `reply` 必须是非空字符串。
+- 缺字段、未知情绪、强度越界、非法 JSON 和非 2xx 响应都会显示明确错误。
+
 ## 项目结构
 
 ```text
@@ -80,7 +95,9 @@ Assets/
 │   ├── AI/
 │   │   ├── ChatCompletionData.cs
 │   │   ├── DeepSeekApiSettings.cs
-│   │   └── DeepSeekChatClient.cs
+│   │   ├── DeepSeekChatClient.cs
+│   │   ├── DeepSeekEmotionResponseParser.cs
+│   │   └── EmotionResult.cs
 │   ├── NPC/
 │   │   └── NpcInteractable.cs
 │   ├── Player/

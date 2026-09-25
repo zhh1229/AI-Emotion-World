@@ -101,7 +101,7 @@ namespace AIEmotionWorld.UI
 
             chatClient.SendChat(
                 playerMessage,
-                reply => HandleReply(npcName, reply),
+                result => HandleReply(npcName, result.Reply),
                 error => HandleRequestError(error));
         }
 
