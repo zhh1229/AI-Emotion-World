@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 9：Unity 情绪解析。DeepSeek 返回的 JSON 会先经过统一解析服务，再生成 `EmotionResult` 并同步到 NPC 的 `NpcEmotionState`，对话 UI 只负责显示回复。
+当前完成阶段 10：NPC 情绪反应。`NpcEmotionState` 的五种情绪会触发不同颜色、姿态和动作，对话回复与 NPC 表现会同步更新。
 
-玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求、结构化情绪解析和 NPC 情绪状态同步均已通过实际运行验证。NPC 情绪表现和场景反馈尚未开始实现。
+玩家移动、NPC、交互、对话 UI、模拟 API 错误处理、真实 DeepSeek 请求、结构化情绪解析、NPC 情绪状态同步和五种 NPC 情绪表现均已通过实际运行验证。场景级情绪反馈尚未开始实现。
 
 ## Unity 版本
 
@@ -87,6 +87,16 @@ AI 必须返回以下结构：
 
 `EmotionConversationService` 负责请求编排和解析，`NpcEmotionState` 保存当前情绪与强度。非法响应不会修改 NPC 当前状态。
 
+## NPC 情绪表现
+
+| 情绪 | 视觉表现 |
+|---|---|
+| `happy` | 金色躯干、抬头上扬、双臂展开 |
+| `sad` | 蓝色躯干、低头前倾、手臂下垂 |
+| `angry` | 红色躯干、双臂张开、快速抖动 |
+| `calm` | 绿色躯干、自然呼吸、身体平稳 |
+| `neutral` | 原始颜色和标准站姿 |
+
 ## 项目结构
 
 ```text
@@ -114,6 +124,7 @@ Assets/
 │   │   └── EmotionResult.cs
 │   ├── NPC/
 │   │   ├── NpcEmotionState.cs
+│   │   ├── NpcEmotionReaction.cs
 │   │   └── NpcInteractable.cs
 │   ├── Player/
 │   │   ├── PlayerController.cs

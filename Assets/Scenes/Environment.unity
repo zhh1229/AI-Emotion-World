@@ -2937,6 +2937,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.NPC.NpcEmotionState
   currentEmotion: 4
   currentIntensity: 0
+--- !u!114 &2103608271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103608266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec270daca0b61b0468daaddb22cd6bbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.NPC.NpcEmotionReaction
+  emotionState: {fileID: 2103608270}
+  transitionSpeed: 6
 --- !u!1001 &1334564612180904905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2999,6 +3013,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2103608270}
+    - targetCorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2103608271}
   m_SourcePrefab: {fileID: 100100000, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
