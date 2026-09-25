@@ -4,13 +4,15 @@
 
 ## 当前状态
 
-当前处于阶段 1：Unity 项目初始化。玩家、NPC、场景、对话、AI 接入和情绪响应尚未开始实现。
+当前完成阶段 2：最小 3D 场景。`Environment` 场景已包含地面、道路、树木、灌木、岩石、碰撞体、基础灯光和相机，并已在 Play Mode 中运行验证。
+
+玩家移动、NPC、对话、AI 接入和情绪响应尚未开始实现。
 
 ## Unity 版本
 
-- Unity Editor：`2022.3.62f3`
-- 版本 revision：`96770f904ca7`
-- 渲染管线：Unity 2022.3 默认模板
+- Unity Editor：`6000.3.25f1`
+- 版本 revision：`e1dba0a9aba4`
+- 渲染管线：Built-in Render Pipeline
 
 请使用与 `ProjectSettings/ProjectVersion.txt` 一致的 Unity 版本打开项目，避免不必要的升级和资源重导入。
 
@@ -19,15 +21,26 @@
 1. 打开 Unity Hub。
 2. 进入 `Projects`。
 3. 点击 `Add`，选择本仓库根目录。
-4. 确认项目使用 `2022.3.62f3` 打开。
+4. 确认项目使用 `6000.3.25f1` 打开。
+5. 打开 `Assets/Scenes/Environment.unity`。
 
-本阶段只验证工程可以打开和编译，不创建玩法场景。
+进入 Play Mode 后应能看到绿色地面、中央石板路以及分布在庭院中的树木、灌木和岩石。
 
 ## 项目结构
 
 ```text
 Assets/
 ├── Scenes/
+│   └── Environment.unity
+├── Materials/
+│   └── Environment/
+├── Prefabs/
+│   └── Environment/
+│       ├── Plants/
+│       ├── Rocks/
+│       └── Trees/
+├── ThirdParty/
+│   └── KenneyNatureKit/
 └── Scripts/
 Packages/
 ProjectSettings/
@@ -35,7 +48,7 @@ AGENTS.md
 README.md
 ```
 
-后续只在实际需要时增加 `Prefabs`、`Models`、`Materials`、`Animations`、`Audio` 和完整脚本子目录。
+后续只在实际需要时增加 `Models`、`Animations`、`Audio` 和完整脚本子目录。
 
 ## 开发原则
 
