@@ -429,6 +429,7 @@ GameObject:
   - component: {fileID: 485753129}
   - component: {fileID: 485753128}
   - component: {fileID: 485753127}
+  - component: {fileID: 485753130}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -493,6 +494,20 @@ Transform:
   - {fileID: 1451748908}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &485753130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485753126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a446035a8843d42999a9f4b834ab2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.Player.PlayerInteractor
+  interactionKey: 101
+  searchRadius: 6
 --- !u!1001 &509364953
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1554,6 +1569,25 @@ Transform:
   - {fileID: 1072213736}
   m_Father: {fileID: 618492005}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2103608266 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
+  m_PrefabInstance: {fileID: 1334564612180904905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2103608269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103608266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52ebd23a43dbc3445b14fe3b3f310701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.NPC.NpcInteractable
+  npcName: Courtyard Visitor
+  interactionRange: 2.5
 --- !u!1001 &1334564612180904905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1609,7 +1643,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8955399444457988522, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2103608269}
   m_SourcePrefab: {fileID: 100100000, guid: f09bba51e81f08a499b647e43300dd49, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 4：NPC。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机，以及一个带碰撞体的人形 NPC。玩家移动与 NPC 场景均已通过 Play Mode 实际验证。
+当前完成阶段 5：玩家与 NPC 交互。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、带碰撞体的人形 NPC，以及靠近后按 `E` 触发的基础交互。玩家移动、NPC 和交互均已通过 Play Mode 实际验证。
 
-NPC 交互、对话、AI 接入和情绪响应尚未开始实现。
+对话 UI、AI 接入和情绪响应尚未开始实现。
 
 ## Unity 版本
 
@@ -30,6 +30,7 @@ NPC 交互、对话、AI 接入和情绪响应尚未开始实现。
 
 - `W`、`A`、`S`、`D`：相对相机方向移动玩家。
 - 鼠标移动：旋转第三人称相机。
+- 靠近 NPC 至 `2.5 m` 内按 `E`：触发 NPC 交互并使 NPC 转向玩家。
 - 玩家使用 `CharacterController`，会受地面、树木和岩石碰撞体阻挡。
 - 当前版本不包含跳跃。
 
@@ -51,8 +52,11 @@ Assets/
 │   └── NPC/
 │       └── NPC_Default.prefab
 ├── Scripts/
+│   ├── NPC/
+│   │   └── NpcInteractable.cs
 │   └── Player/
 │       ├── PlayerController.cs
+│       ├── PlayerInteractor.cs
 │       └── ThirdPersonCamera.cs
 ├── ThirdParty/
 │   └── KenneyNatureKit/
