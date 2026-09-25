@@ -15,11 +15,6 @@ namespace AIEmotionWorld.NPC
             return "Hello, traveler.";
         }
 
-        public string CreateReply(string playerMessage)
-        {
-            return $"I heard: \"{playerMessage}\".";
-        }
-
         public void FaceInteractor(GameObject interactor)
         {
             if (interactor == null)

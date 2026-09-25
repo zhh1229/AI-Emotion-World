@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 61654069}
   - component: {fileID: 61654068}
   - component: {fileID: 61654067}
+  - component: {fileID: 61654072}
   m_Layer: 5
   m_Name: DialogueCanvas
   m_TagString: Untagged
@@ -269,6 +270,7 @@ MonoBehaviour:
   inputField: {fileID: 681953801}
   sendButton: {fileID: 72020289}
   playerController: {fileID: 485753127}
+  chatClient: {fileID: 61654072}
 --- !u!114 &61654068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,6 +354,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &61654072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61654066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a36a0ad3ab941d2499ffde4b4b9e6d1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIEmotionWorld.AI.DeepSeekChatClient
+  timeoutSeconds: 30
 --- !u!1001 &68110127
 PrefabInstance:
   m_ObjectHideFlags: 0

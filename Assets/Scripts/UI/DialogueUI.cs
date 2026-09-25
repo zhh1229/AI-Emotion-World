@@ -1,3 +1,4 @@
+using AIEmotionWorld.AI;
 using AIEmotionWorld.NPC;
 using AIEmotionWorld.Player;
 using TMPro;
@@ -15,6 +16,7 @@ namespace AIEmotionWorld.UI
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button sendButton;
         [SerializeField] private PlayerController playerController;
+        [SerializeField] private DeepSeekChatClient chatClient;
 
         private NpcInteractable currentNpc;
         private GameObject currentInteractor;
@@ -27,7 +29,8 @@ namespace AIEmotionWorld.UI
                 speakerText == null ||
                 responseText == null ||
                 inputField == null ||
-                sendButton == null)
+                sendButton == null ||
+                chatClient == null)
             {
                 Debug.LogError("Dialogue UI references are incomplete.", this);
                 enabled = false;
@@ -91,10 +94,37 @@ namespace AIEmotionWorld.UI
                 return;
             }
 
-            responseText.text = $"{currentNpc.NpcName}: {currentNpc.CreateReply(playerMessage)}";
+            string npcName = currentNpc.NpcName;
             inputField.text = string.Empty;
+            responseText.text = $"{npcName}: Thinking...";
+            SetInputEnabled(false);
+
+            chatClient.SendChat(
+                playerMessage,
+                reply => HandleReply(npcName, reply),
+                error => HandleRequestError(error));
+        }
+
+        private void HandleReply(string npcName, string reply)
+        {
+            responseText.text = $"{npcName}: {reply}";
+            SetInputEnabled(true);
             EventSystem.current?.SetSelectedGameObject(inputField.gameObject);
             inputField.ActivateInputField();
+        }
+
+        private void HandleRequestError(string error)
+        {
+            responseText.text = error;
+            SetInputEnabled(true);
+            EventSystem.current?.SetSelectedGameObject(inputField.gameObject);
+            inputField.ActivateInputField();
+        }
+
+        private void SetInputEnabled(bool enabled)
+        {
+            inputField.interactable = enabled;
+            sendButton.interactable = enabled;
         }
     }
 }

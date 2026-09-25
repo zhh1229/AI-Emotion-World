@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-当前完成阶段 6：对话 UI。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、人形 NPC，以及可输入和发送文本的对话面板。玩家移动、NPC、交互和对话 UI 均已通过 Play Mode 实际验证。
+当前完成阶段 7：AI 接入。`Environment` 场景包含基础庭院、蓝色玩家角色、键鼠移动、第三人称相机、人形 NPC、对话 UI，以及可调用 DeepSeek 官方接口的文本回复链路。
 
-AI 接入和情绪响应尚未开始实现。当前 NPC 回复是可验证 UI 链路的固定占位内容。
+玩家移动、NPC、交互、对话 UI、模拟 API 错误处理和真实 DeepSeek 请求均已通过实际运行验证。结构化情绪响应尚未开始实现。
 
 ## Unity 版本
 
@@ -36,6 +36,29 @@ AI 接入和情绪响应尚未开始实现。当前 NPC 回复是可验证 UI �
 - 玩家使用 `CharacterController`，会受地面、树木和岩石碰撞体阻挡。
 - 当前版本不包含跳跃。
 
+## DeepSeek 配置
+
+真实 API Key 禁止写入仓库。程序按以下优先顺序读取配置：
+
+1. 环境变量：`DEEPSEEK_API_KEY`、`DEEPSEEK_API_URL`、`DEEPSEEK_MODEL`。
+2. 本机用户配置：
+
+```text
+%USERPROFILE%\AppData\LocalLow\DefaultCompany\AI Emotion World\deepseek-config.json
+```
+
+本地配置模板：
+
+```json
+{
+  "apiKey": "在本机填写，不要提交",
+  "apiUrl": "https://api.deepseek.com/chat/completions",
+  "model": "deepseek-v4-flash"
+}
+```
+
+默认接口为 `https://api.deepseek.com/chat/completions`，默认模型为 `deepseek-v4-flash`。
+
 ## 项目结构
 
 ```text
@@ -54,6 +77,10 @@ Assets/
 │   └── NPC/
 │       └── NPC_Default.prefab
 ├── Scripts/
+│   ├── AI/
+│   │   ├── ChatCompletionData.cs
+│   │   ├── DeepSeekApiSettings.cs
+│   │   └── DeepSeekChatClient.cs
 │   ├── NPC/
 │   │   └── NpcInteractable.cs
 │   ├── Player/

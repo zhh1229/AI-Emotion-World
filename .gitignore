@@ -47,3 +47,5 @@ sysinfo.txt
 *.secret
 /secrets/
 /Assets/**/Secrets/
+deepseek-config.json
+**/deepseek-config.json
